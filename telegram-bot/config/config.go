@@ -1,6 +1,10 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"strings"
+
+	"github.com/spf13/viper"
+)
 
 type Config struct {
 	Bot BotConfig `mapstructure:"bot"`
@@ -17,6 +21,8 @@ func LoadConfig() (config Config, err error) {
 	viper.AddConfigPath("./config")
 	viper.AutomaticEnv()
 
+	replacer := strings.NewReplacer(".", "_")
+	viper.SetEnvKeyReplacer(replacer)
 	err = viper.ReadInConfig()
 	if err != nil {
 		return
